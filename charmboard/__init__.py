@@ -27,7 +27,7 @@ app = Flask(__name__)
 # warmup
 #vs = VideoStream(usePiCamera=1).start()
 print("[INFO] starting video stream...")
-vs = VideoStream(src=0).start()
+vs = VideoStream(src=1).start()
 time.sleep(2.0)
 
 @app.route("/")
@@ -106,6 +106,6 @@ if __name__=='__main__':
     t.start()
 
     #start flask app
-    app.run(debug=True,threaded=True,use_reloader=False,host='0.0.0.0')
+    app.run(debug=True,threaded=True,use_reloader=False,host='0.0.0.0',port=80)
 #release video stream pointer
 vs.stop()
