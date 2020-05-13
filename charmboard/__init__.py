@@ -27,7 +27,8 @@ app = Flask(__name__)
 # warmup
 #vs = VideoStream(usePiCamera=1).start()
 print("[INFO] starting video stream...")
-vs = VideoStream(src=1).start()
+vs = VideoStream(src=0).start()
+#vs=cv2.VideoCapture(0)
 time.sleep(2.0)
 
 @app.route("/")
@@ -95,8 +96,8 @@ def video_feed():
 if __name__=='__main__':
     #construct argument parser and parse command line args
     ap=argparse.ArgumentParser()
-    ap.add_argument("-p","--prototxt",required=True,help="path to Caffe 'deploy' prototxt file",default="charmboard/MobileNetSSD_deploy.prototxt.txt")
-    ap.add_argument("-m","--model",required=True,help="path to caffe pre-trained model",default="charmboard/MobileNetSSD_deploy.caffemodel")
+    ap.add_argument("-p","--prototxt",help="path to Caffe 'deploy' prototxt file",default="charmboard/MobileNetSSD_deploy.prototxt.txt")
+    ap.add_argument("-m","--model",help="path to caffe pre-trained model",default="charmboard/MobileNetSSD_deploy.caffemodel")
     ap.add_argument("-c","--confidence",type=float,default=0.2,help="minimum probability to filter weak detections")
     args=vars(ap.parse_args())
 
@@ -106,6 +107,7 @@ if __name__=='__main__':
     t.start()
 
     #start flask app
-    app.run(debug=True,threaded=True,use_reloader=False,host='0.0.0.0',port=80)
+    app.run(threaded=True,use_reloader=False,host='0.0.0.0',port=80)
 #release video stream pointer
 vs.stop()
+#vs.release()
