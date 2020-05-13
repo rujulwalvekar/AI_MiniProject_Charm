@@ -2,6 +2,7 @@
 from imutils.video import VideoStream
 from flask import Response,Flask,render_template
 import threading
+from multiprocessing import Process
 import argparse
 import datetime
 import imutils
@@ -103,8 +104,9 @@ if __name__=='__main__':
 
     #start thread that will perform
     t=threading.Thread(target=detect)
+    #p=Process(target=detect)
     t.daemon=True
-    t.start()
+    #p.start()
 
     #start flask app
     app.run(threaded=True,use_reloader=False,host='0.0.0.0',port=80)

@@ -9,7 +9,6 @@ urllib3==1.25.8
 Werkzeug==1.0.1
 black==19.10b0
 imutils
-threading
 argparse
 cv2
 numpy
