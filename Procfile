@@ -1,1 +1,1 @@
-web:gunicorn charmboard:app
+web: gunicorn charmboard:app
