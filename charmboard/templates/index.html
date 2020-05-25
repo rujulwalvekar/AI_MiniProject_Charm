@@ -1,68 +1,130 @@
-<div>Teachable Machine Image Model - p5.js and ml5.js</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
-<script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
-<script type="text/javascript">
-  // Classifier Variable
-  let classifier;
-  // Model URL
- 
-  
-  // Video
-  let video;
-  let flippedVideo;
-  // To store the classification
-  let label = "";
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Charmboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://unpkg.com/popper.js"></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://kit.fontawesome.com/c893428da3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+    <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
+  </head>
+  <body>
+    <div class=".mx-auto px-4">
+      <br />
+      <div class="text-center">
+        <h1 class="display-6">Charmboard</h1>
+      </div>
 
-  // Load the model first
-  function preload() {
-    //classifier = ml5.imageClassifier(imageModelURL + 'model.json');
-    classifier=ml5.imageClassifier('https://raw.githubusercontent.com/rujulwalvekar/AI_MiniProject_Charm/master/model.json');
-  }
+      <!--  <p class="lead">KPIT Sparkle</p>-->
+      <nav class="nav nav-pills nav-justified">
+        <a class="nav-item nav-link active" href="#">Shirt Detection</a>
+        <!--  <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+      </nav>
+      <hr />
+      <div class=".mx-auto px-0">
+        <div class="text-center" id="gg">
+          <div>Teachable Machine Image Model - p5.js and ml5.js</div>
+          <script type="text/javascript">
+            // Classifier Variable
+            let classifier;
+            // Model URL
+            // Video
+            let video;
+            let flippedVideo;
+            // To store the classification
+            let label = "";
+            let array = [];
+            let flag = 1;
+            // Load the model first
+            function preload() {
+              //classifier = ml5.imageClassifier(imageModelURL + 'model.json');
+              classifier = ml5.imageClassifier(
+                "https://raw.githubusercontent.com/rujulwalvekar/AI_MiniProject_Charm/master/model.json"
+              );
+            }
 
-  function setup() {
-    createCanvas(640, 480);
-    // Create the video
-    video = createCapture(VIDEO);
-    video.size(640, 460);
-    video.hide();
+            function setup() {
+              var canvas = createCanvas(640, 480);
+              canvas.parent("gg");
+              // Create the video
+              video = createCapture(VIDEO);
+              video.size(640, 460);
+              video.hide();
 
-    flippedVideo = ml5.flipImage(video);
-    // Start classifying
-    classifyVideo();
-  }
+              flippedVideo = ml5.flipImage(video);
+              // Start classifying
+              classifyVideo();
+            }
 
-  function draw() {
-    background(0);
-    // Draw the video
-    image(flippedVideo, 0, 0);
+            function draw() {
+              background(0);
+              // Draw the video
+              image(flippedVideo, 0, 0);
 
-    // Draw the label
-    fill(255);
-    textSize(16);
-    textAlign(CENTER);
-    text(label, width / 2, height - 4);
-  }
+              // Draw the label
+              fill(255);
+              textSize(16);
+              textAlign(CENTER);
+              text(label, width / 2, height - 4);
 
-  // Get a prediction for the current video frame
-  function classifyVideo() {
-    flippedVideo = ml5.flipImage(video)
-    classifier.classify(flippedVideo, gotResult);
-    flippedVideo.remove();
+              if (flag != 0) {
+                for (let i = 0; i < array.length; i++) {
+                  let txt = createDiv(array[i]);
+                  txt.parent("gg");
+                  flag = 0;
+                }
+                
+              }
+            }
 
-  }
+            // Get a prediction for the current video frame
+            function classifyVideo() {
+              flippedVideo = ml5.flipImage(video);
+              classifier.classify(flippedVideo, gotResult);
+              flippedVideo.remove();
+            }
 
-  // When we get a result
-  function gotResult(error, results) {
-    // If there is an error
-    if (error) {
-      console.error(error);
-      return;
-    }
-    // The results are in an array ordered by confidence.
-    // console.log(results[0]);
-    label = results[0].label;
-    // Classifiy again!
-    classifyVideo();
-  }
-</script>
+            // When we get a result
+            function gotResult(error, results) {
+              // If there is an error
+              if (error) {
+                console.error(error);
+                return;
+              }
+              // The results are in an array ordered by confidence.
+              // console.log(results[0]);
+              label = results[0].label;
+              for (let i = 0; i < results.length; i++) {
+                array[i] = results[i].label;
+              }
+              // Classifiy again!
+              
+              classifyVideo();
+            }
+          </script>
+        </div>
+        <div class="row">
+          <div class="col-sm" id="gg">
+            <div id="ggg"></div>
+            <div id="ggg-2"></div>
+            <div id="ggg-3"></div>
+
+            <!-- <div id="jumbo-canvas" class="jumbotron"></div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
