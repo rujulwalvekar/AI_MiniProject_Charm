@@ -1,2 +1,2 @@
-# Charmboard
+# VisualCloset
 # Git bot commit
